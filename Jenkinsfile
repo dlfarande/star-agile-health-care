@@ -42,5 +42,13 @@ pipeline {
 				sh "docker push dlfarande/dlf-health-eta-app:latest"
 			}
 		}
+        stage('Deploy to Kubernetes Dev Environment') {
+            steps {
+		script {
+		    sshPublisher(publishers: [sshPublisherDesc(configName: 'kubernets_cluster', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'kubectl apply -f kubernetesdeploy.yaml', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '.', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '*.yaml')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)]) 
+		    
+            	  }
+            }
+        }
     }
 }
